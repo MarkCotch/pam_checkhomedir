@@ -18,6 +18,10 @@ test%:
 clean:
 	rm -vf *.o a.* *.so
 
+###
+### Installers
+###
+
 install: install_bin install_conf
 
 install_bin: install_bin_$(ID_LIKE)
@@ -38,6 +42,9 @@ install_conf_"fedora":
 #	perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth        requisite    pam_checkhomedir.so /' /etc/pam.d/system-auth
 #	perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth        requisite    pam_checkhomedir.so /' /etc/pam.d/password-auth
 
+###
+### Uninstallers
+###
 
 uninstall: uninstall_bin uninstall_conf
 
@@ -58,4 +65,3 @@ uninstall_bin_"fedora":
 uninstall_conf_"fedora":
 #	perl -i -pe 's/^auth.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
 #	perl -i -pe 's/^auth.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
-	
