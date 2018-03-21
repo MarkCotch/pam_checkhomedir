@@ -8,9 +8,9 @@ OBJ =
 %.o: %.c $(DEPS)
 	$(CC) -c -fPIC -o $@ $< $(CFLAGS)
 
-pam_checkhomedir: $(OBJ)
+pam_checkhomedir:
 	echo "$(ID_LIKE)"
-	$(CC) -shared -o $@.so $< $(CFLAGS)
+	$(CC) -fPIC -shared -o $@.so $@.c $(CFLAGS)
 
 test%:
 	$(CC) -o a.$@ $@.c $< $(CFLAGS)
