@@ -13,5 +13,6 @@ pre-test for its existence.  We want the underlying file system/mounts to interc
 the open request, block, and mount the home directory before releasing the I/O
 blocking.  
 
-Security NOTE:  Depending on how you configure PAM the user's home directory 
-may mount regardless if the users credential are valid.  YMMV.
+Security NOTE:  We currently do NOT test ownership or permissions at this time.
+Depending on how you configure PAM the user's home directory may mount regardless
+if the users credential are valid.  YMMV.
