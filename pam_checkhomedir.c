@@ -25,7 +25,7 @@
   #define __COPYRIGHT__ 2018
   #define __AUTHOR__ "Mark Coccimiglio"
   #define __AUTHOR_EMAIL__ "mcoccimiglio@rice.edu"
-  #define __APP__ pam_checkhomedir
+  #define __APP__ "pam_checkhomedir"
 #endif
 
 #define PAM_SM_AUTH
@@ -133,5 +133,5 @@ PAM_EXTERN int
 }
 
 #ifdef PAM_MODULE_ENTRY
- PAM_MODULE_ENTRY("pam_checkhomedir");
+ PAM_MODULE_ENTRY(__APP__);
 #endif
