@@ -41,7 +41,7 @@
 #include <dirent.h>
 #include <syslog.h>
 
-#define __DEBUG__ 1
+#define __DEBUG__ (0)
 
 int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
       const char  *service;
@@ -49,11 +49,8 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
       const char  *authtok;
 
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:checkhomedir");
-      openlog(NULL , LOG_PID, LOG_AUTHPRIV);
-
       if ( pam_get_item(pamh, PAM_SERVICE, (const void **)(const void *)&service ) != PAM_SUCCESS || !service || !*service) {
           syslog (LOG_NOTICE, "Unable to retrieve the PAM service name for :%s STOP.", service);
-          closelog();
           return (PAM_AUTH_ERR);
         }
       if (__DEBUG__) syslog(LOG_NOTICE, "DEBUG:We have service '%s' ...continue. ", service);
@@ -62,7 +59,6 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
           if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:No user provided,  Asking PAM for username.");
           if ( pam_get_user (pamh, &user, NULL) != PAM_SUCCESS || !user || !*user ) {
            syslog (LOG_NOTICE, "pam_checkhomedir(%s:auth): Unable to retrieve the PAM user name, is NULL, or zero length, for '%s' ", service, user);
-           closelog();
            return (PAM_USER_UNKNOWN);
          }
       }
@@ -71,28 +67,26 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
       struct passwd *_userInfo=getpwnam(user);
       if (! _userInfo) {
         char __tempNotice[256]={0};
-        syslog (LOG_NOTICE, "pam_checkhomedir(%s:auth): Unable to locate user ID : '%s' STOP.", service, user);
-        closelog();
+        syslog (LOG_NOTICE, "pam_checkhomedir(%s): Unable to locate user ID : '%s' STOP.", service, user);
         return (PAM_USER_UNKNOWN);
       }
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:We have validated user: '%s' ...continue.", user);
 
       DIR *_homeDIR;
       if ( (_homeDIR=opendir(_userInfo->pw_dir) ) ) {
-        if (__DEBUG__) syslog (LOG_NOTICE, "pam_checkhomedir(%s:auth): Validated home directory: '%s' ", service, _userInfo->pw_dir);
+        syslog (LOG_NOTICE, "pam_checkhomedir(%s): Validated home directory: '%s' ", service, _userInfo->pw_dir);
         closedir (_homeDIR);
-        closelog();
         return (PAM_SUCCESS);
       }
       closedir (_homeDIR);
-      if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:we have NOT validated home dir: '%s' ...continue.", _userInfo->pw_dir);
-
+      syslog (LOG_NOTICE, "pam_checkhomedir(%s): We have NOT validated home dir: '%s' ...continue.", service, _userInfo->pw_dir);
       return (PAM_PERM_DENIED);
 }
 
 PAM_EXTERN int
   pam_sm_authenticate
    (pam_handle_t *pamh, int flags, int argc, const char **argv) {
+     openlog(NULL , LOG_PID, LOG_AUTHPRIV);
      if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:pam_checkhomedir:pam_sm_authenticate");
      return ( checkhomedir(pamh, flags, argc, argv) );
 
@@ -101,6 +95,7 @@ PAM_EXTERN int
 PAM_EXTERN int
   pam_sm_setcred
    (pam_handle_t *pamh, int flags, int argc, const char **argv) {
+     openlog(NULL , LOG_PID, LOG_AUTHPRIV);
      if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:pam_checkhomedir:pam_sm_setcred");
      return ( checkhomedir(pamh, flags, argc, argv) );
 }
@@ -108,6 +103,7 @@ PAM_EXTERN int
 PAM_EXTERN int
   pam_sm_acct_mgmt
     (pam_handle_t *pamh, int flags, int argc, const char **argv) {
+      openlog(NULL , LOG_PID, LOG_AUTHPRIV);
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:pam_checkhomedir:pam_sm_acct_mgmt");
       return ( checkhomedir(pamh, flags, argc, argv) );
 }
@@ -115,6 +111,7 @@ PAM_EXTERN int
 PAM_EXTERN int
   pam_sm_open_session
     (pam_handle_t *pamh, int flags, int argc, const char **argv) {
+      openlog(NULL , LOG_PID, LOG_AUTHPRIV);
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:pam_checkhomedir:pam_sm_open_session");
       return ( checkhomedir(pamh, flags, argc, argv) );
 }
@@ -122,6 +119,7 @@ PAM_EXTERN int
 PAM_EXTERN int
   pam_sm_close_session
     (pam_handle_t *pamh, int flags, int argc, const char **argv) {
+      openlog(NULL , LOG_PID, LOG_AUTHPRIV);
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:pam_checkhomedir:pam_sm_close_session");
     	return ( PAM_IGNORE );
 }
@@ -129,6 +127,7 @@ PAM_EXTERN int
 PAM_EXTERN int
   pam_sm_chauthtok
     (pam_handle_t *pamh, int flags, int argc, const char **argv) {
+      openlog(NULL , LOG_PID, LOG_AUTHPRIV);
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:pam_checkhomedir:pam_sm_chauthtok");
       return ( PAM_IGNORE );
 }
