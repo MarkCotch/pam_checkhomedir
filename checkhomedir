@@ -1,0 +1,21 @@
+Name: Check for valid home directory at login.
+Default: yes
+Priority: 512
+
+Auth-Type: Additional
+Auth:
+  requisite     pam_checkhomedir.so
+Auth-Initial:
+  requisite     pam_checkhomedir.so
+
+Session-Type: Additional
+Session:
+  requisite     pam_checkhomedir.so
+Session-Initial:
+  requisite     pam_checkhomedir.so
+
+Account-Type: Additional
+Account:
+  requisite     pam_checkhomedir.so
+Account Initial:
+  requisite     pam_checkhomedir.so
