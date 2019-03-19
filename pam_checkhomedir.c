@@ -20,7 +20,7 @@
 */
 
 #ifndef __PCHD_VERSION__
-  #define __PCHD_VERSION__    "0.0.2
+  #define __PCHD_VERSION__    "0.0.2"
   #define __PCHD_VERSION_D__   0.0.2
   #define __COPYRIGHT__       "2018"
   #define __COPYRIGHT_D__      2018
