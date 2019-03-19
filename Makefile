@@ -39,8 +39,8 @@ install_bin_"fedora":
 	install -v -o root -g root -m 755 pam_checkhomedir.so /usr/lib64/security/
 
 install_conf_"fedora":
-#	grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth        require     pam_checkhomedir.so /' /etc/pam.d/system-auth
-#	grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth        require     pam_checkhomedir.so /' /etc/pam.d/password-auth
+	grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth         required     pam_checkhomedir.so /' /etc/pam.d/system-auth
+	grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth         required     pam_checkhomedir.so /' /etc/pam.d/password-auth
 
 ###
 ### Uninstallers
@@ -63,5 +63,5 @@ uninstall_bin_"fedora":
 	rm -vf /usr/lib64/security/pam_checkhomedir.so
 
 uninstall_conf_"fedora":
-#	perl -i -pe 's/^auth.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
-#	perl -i -pe 's/^auth.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
+	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
+	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
