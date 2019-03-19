@@ -16,3 +16,6 @@ blocking.
 Security NOTE:  We currently do NOT test ownership or permissions at this time.
 Depending on how you configure PAM the user's home directory may mount regardless
 if the users credential are valid.  YMMV.
+
+Dependcies: pam
+Build Dependcies: pam-devel
