@@ -20,8 +20,8 @@
 */
 
 #ifndef __PCHD_VERSION__
-  #define __PCHD_VERSION__    "0.0.1"
-  #define __PCHD_VERSION_D__   0.0.1
+  #define __PCHD_VERSION__    "0.0.2
+  #define __PCHD_VERSION_D__   0.0.2
   #define __COPYRIGHT__       "2018"
   #define __COPYRIGHT_D__      2018
   #define __AUTHOR__ "Mark Coccimiglio"
@@ -74,12 +74,12 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
 
       DIR *_homeDIR;
       if ( (_homeDIR=opendir(_userInfo->pw_dir) ) ) {
-        syslog (LOG_NOTICE, "pam_checkhomedir(%s): Validated home directory: '%s' ", service, _userInfo->pw_dir);
+        syslog (LOG_NOTICE, "pam_checkhomedir(%s): Validated home dir: '%s' ", service, _userInfo->pw_dir);
         closedir (_homeDIR);
         return (PAM_SUCCESS);
       }
       closedir (_homeDIR);
-      syslog (LOG_NOTICE, "pam_checkhomedir(%s): We have NOT validated home dir: '%s' ...continue.", service, _userInfo->pw_dir);
+      syslog (LOG_NOTICE, "pam_checkhomedir(%s): Have NOT validated home dir: '%s' ", service, _userInfo->pw_dir);
       return (PAM_PERM_DENIED);
 }
 
