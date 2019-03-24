@@ -6,7 +6,7 @@ Auth-Type: Additional
 Auth:
   required     pam_checkhomedir.so
 Auth-Initial:
-  requisite     pam_checkhomedir.so
+  required     pam_checkhomedir.so
 
 Session-Type: Additional
 Session:
