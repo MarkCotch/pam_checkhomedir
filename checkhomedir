@@ -4,18 +4,18 @@ Priority: 512
 
 Auth-Type: Additional
 Auth:
-  requisite     pam_checkhomedir.so
+  required     pam_checkhomedir.so
 Auth-Initial:
   requisite     pam_checkhomedir.so
 
 Session-Type: Additional
 Session:
-  requisite     pam_checkhomedir.so
+  required     pam_checkhomedir.so
 Session-Initial:
-  requisite     pam_checkhomedir.so
+  required     pam_checkhomedir.so
 
 Account-Type: Additional
 Account:
-  requisite     pam_checkhomedir.so
+  required     pam_checkhomedir.so
 Account Initial:
-  requisite     pam_checkhomedir.so
+  required     pam_checkhomedir.so
