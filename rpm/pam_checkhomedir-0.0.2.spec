@@ -37,12 +37,19 @@ mkdir -p  %{buildroot}/usr/share/doc/%{name}-%{version}
 mv    -v  README.md %{buildroot}/usr/share/doc/%{name}-%{version}/ 
 mv    -v  LICENSE   %{buildroot}/usr/share/doc/%{name}-%{version}/
 
+%post
+grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$)/auth        required      pam_checkhomedir.so \n$1/' /etc/pam.d/system-auth
+grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$)/auth        required      pam_checkhomedir.so \n$1/' /etc/pam.d/password-auth
+
+%postun
+test -f /usr/lib64/security/pam_checkhomedir.so || perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
+test -f /usr/lib64/security/pam_checkhomedir.so || perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
+
 
 %files
 /usr/lib64/security/pam_checkhomedir.so
 /usr/share/man/man8/pam_checkhomedir.8
-/usr/share/doc/%{name}-%{version}/README.md
-/usr/share/doc/%{name}-%{version}/LICENSE
+/usr/share/doc/%{name}-%{version}
 
 
 

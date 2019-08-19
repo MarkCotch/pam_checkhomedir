@@ -18,7 +18,7 @@ test%:
 	$(CC) -o a.$@ $@.c $< $(CFLAGS)
 
 clean:
-	rm -vf *.o a.* *.so rpm/$(NAME)-$(VERSION).tar.gz
+	rm -rvf *.o a.* *.so $(NAME)-$(VERSION)/ rpm/$(NAME)-$(VERSION).tar.gz
 
 ###
 ### Installers
