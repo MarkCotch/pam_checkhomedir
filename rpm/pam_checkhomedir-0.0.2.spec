@@ -7,13 +7,12 @@ Version:	%{version}
 Release:	%{release}
 Summary:	Check that a user's home directory is present on the system.
 
-Group:		
 License:	GPLv3
 URL:		https://github.com/MarkCotch/pam_checkhomedir
 Source0:	%{name}-%{version}.tar.gz
 
-BuildRequires:	
 Requires:	pam
+Requires:	perl
 
 %description
 NOTE: This package currently works but is considered BETA.
@@ -27,28 +26,28 @@ Security NOTE: We currently do NOT test ownership or permissions at this time. D
 
 
 %install
-mkdir -p  %{buildroot}/usr/lib64/security/ 
-mv    -v  pam_checkhomedir.so %{buildroot}/usr/lib64/security/ 
+mkdir -p   %{buildroot}/usr/lib64/security/ 
+mv    -v   pam_checkhomedir.so %{buildroot}/usr/lib64/security/ 
 
-mkdir -p  %{buildroot}/usr/share/man/man8/ 
-mv    -v  pam_checkhomedir.8  %{buildroot}/usr/share/man/man8/ 
+mkdir -p   %{buildroot}/usr/share/man/man8/ 
+mv    -v   pam_checkhomedir.8 %{buildroot}/usr/share/man/man8/
 
-mkdir -p  %{buildroot}/usr/share/doc/%{name}-%{version} 
-mv    -v  README.md %{buildroot}/usr/share/doc/%{name}-%{version}/ 
-mv    -v  LICENSE   %{buildroot}/usr/share/doc/%{name}-%{version}/
+mkdir -p   %{buildroot}/usr/share/doc/%{name}-%{version} 
+mv    -v   README.md %{buildroot}/usr/share/doc/%{name}-%{version}/ 
+mv    -v   LICENSE   %{buildroot}/usr/share/doc/%{name}-%{version}/
 
 %post
 grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$)/auth        required      pam_checkhomedir.so \n$1/' /etc/pam.d/system-auth
 grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$)/auth        required      pam_checkhomedir.so \n$1/' /etc/pam.d/password-auth
 
 %postun
-test -f /usr/lib64/security/pam_checkhomedir.so || perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
-test -f /usr/lib64/security/pam_checkhomedir.so || perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
+(( $1 )) || perl -i -pe 's/^.*pam_checkhomedir.*\n$//' /etc/pam.d/system-auth
+(( $1 )) || perl -i -pe 's/^.*pam_checkhomedir.*\n$//' /etc/pam.d/password-auth
 
 
 %files
 /usr/lib64/security/pam_checkhomedir.so
-/usr/share/man/man8/pam_checkhomedir.8
+/usr/share/man/man8/pam_checkhomedir.8.gz
 /usr/share/doc/%{name}-%{version}
 
 
