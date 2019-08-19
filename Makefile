@@ -57,11 +57,18 @@ install_conf_"fedora":
 ### Uninstallers
 ###
 
-uninstall: uninstall_bin uninstall_conf
+uninstall: uninstall_bin uninstall_conf uninstall_docs
 
 uninstall_bin: uninstall_bin_$(ID_LIKE)
 
 uninstall_conf: uninstall_conf_$(ID_LIKE)
+
+uninstall_bin_debian: uninstall_bin_"debian"
+
+uninstall_conf_debian: uninstall_conf_"debian"
+
+uninstall_docs:
+	rm -vf /usr/share/man/man8/pam_checkhomedir.8
 
 uninstall_bin_"debian":
 	rm -vf /usr/lib64/security/pam_checkhomedir.so
