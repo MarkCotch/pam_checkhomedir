@@ -22,11 +22,22 @@ clean:
 ### Installers
 ###
 
-install: install_bin install_conf
+install: install_bin install_conf install_docs
 
 install_bin: install_bin_$(ID_LIKE)
 
 install_conf: install_conf_$(ID_LIKE)
+
+install_bin_debian: install_bin_"debian"
+
+install_conf_debian: install_conf_"debian"
+
+install_bin_fedora: install_bin_"fedora"
+
+install_conf_fedora: install_conf_"fedora"
+
+install_docs:
+	install -v -o root -g root -m 755 pam_checkhomedir.8 /usr/share/man/man8/
 
 install_bin_"debian":
 	install -v -o root -g root -m 755 pam_checkhomedir.so /lib/x86_64-linux-gnu/security/
