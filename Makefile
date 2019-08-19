@@ -1,14 +1,16 @@
 include	/etc/os-release
+NAME = pam_checkhomedir
+VERSION = 0.0.2
 CC=gcc
 CFLAGS=-I. -lm
 DEPS =
 OBJ =
-
+PREFIX =
 
 %.o: %.c $(DEPS)
 	$(CC) -c -fPIC -o $@ $< $(CFLAGS)
 
-pam_checkhomedir:
+$(NAME):
 	echo "$(ID_LIKE)"
 	$(CC) -fPIC -shared -o $@.so $@.c $(CFLAGS)
 
@@ -16,7 +18,7 @@ test%:
 	$(CC) -o a.$@ $@.c $< $(CFLAGS)
 
 clean:
-	rm -vf *.o a.* *.so
+	rm -vf *.o a.* *.so rpm/$(NAME)-$(VERSION).tar.gz
 
 ###
 ### Installers
@@ -36,18 +38,26 @@ install_bin_fedora: install_bin_"fedora"
 
 install_conf_fedora: install_conf_"fedora"
 
+source: pam_checkhomedir
+	mkdir -p $(NAME)-$(VERSION)
+	cp    -v LICENSE             $(NAME)-$(VERSION)/
+	cp    -v pam_checkhomedir.8  $(NAME)-$(VERSION)/
+	cp    -v pam_checkhomedir.so $(NAME)-$(VERSION)/
+	cp    -v README.md           $(NAME)-$(VERSION)/
+	tar    czvf rpm/$(NAME)-$(VERSION).tar.gz  $(NAME)-$(VERSION)/
+
 install_docs:
-	install -v -o root -g root -m 755 pam_checkhomedir.8 /usr/share/man/man8/
+	install -v -o root -g root -m 755 pam_checkhomedir.8 $(PREFIX)/usr/share/man/man8/
 
 install_bin_"debian":
-	install -v -o root -g root -m 755 pam_checkhomedir.so /lib/x86_64-linux-gnu/security/
+	install -v -o root -g root -m 755 pam_checkhomedir.so $(PREFIX)/lib/x86_64-linux-gnu/security/
 
 install_conf_"debian":
-	install -v -o root -g root -m 755 checkhomedir /usr/share/pam-configs/checkhomedir
+	install -v -o root -g root -m 755 checkhomedir $(PREFIX)/usr/share/pam-configs/checkhomedir
 	pam-auth-update --package
 
 install_bin_"fedora":
-	install -v -o root -g root -m 755 pam_checkhomedir.so /usr/lib64/security/
+	install -v -o root -g root -m 755 pam_checkhomedir.so $(PREFIX)/usr/lib64/security/
 
 install_conf_"fedora":
 	grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/auth        required      pam_checkhomedir.so \n$$1/' /etc/pam.d/system-auth
