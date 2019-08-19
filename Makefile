@@ -103,7 +103,8 @@ updateversion: clean
 #	perl -i -pe 's/^(.*#define __PCHD_VERSION__).*$$/ \1  "$(NEWVER)" /'  $(NAME).c
 #	perl -i -pe 's/^(.*#define __PCHD_VERSION_D__).*$$/ \1  $(NEWVER) /'  $(NAME).c
 #	cp -v rpm/$(NAME)-$(VERSION).spec  rpm/$(NAME)-$(NEWVER).spec 
-#	perl -i -pe 's/^(%define.*version.*)%d.*$/ \1  $(NEWVER) /' rpm/$(NAME)-$(NEWVER).spec
+#	perl -i -pe 's/^(%define.*version.*)%d.*$$/ \1  $(NEWVER) /' rpm/$(NAME)-$(NEWVER).spec
+#	perl -i -pe "s/.TH.*$/.TH man 8 \"$$(date "+%d %b %Y")\" \"$(NEWVER)\" \"$(NAME) man page\" " $(NAME).8
 
 
 
