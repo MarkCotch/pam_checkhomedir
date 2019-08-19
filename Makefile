@@ -93,3 +93,17 @@ uninstall_bin_"fedora":
 uninstall_conf_"fedora":
 	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
 	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
+
+updateversion: clean 
+	@(( NEWVER )) || echo 'update version requires define NEWVER. (e.g. make NEWVER=x.x.x updateversion)'
+	@(( NEWVER )) || exit
+	@echo $(NEWVER)
+
+#	perl -i -pe 's/^(VERSION =).*/\1 $(NEWVER)/' Makefile
+#	perl -i -pe 's/^(.*#define __PCHD_VERSION__).*$$/ \1  "$(NEWVER)" /'  $(NAME).c
+#	perl -i -pe 's/^(.*#define __PCHD_VERSION_D__).*$$/ \1  $(NEWVER) /'  $(NAME).c
+#	cp -v rpm/$(NAME)-$(VERSION).spec  rpm/$(NAME)-$(NEWVER).spec 
+#	perl -i -pe 's/^(%define.*version.*)%d.*$/ \1  $(NEWVER) /' rpm/$(NAME)-$(NEWVER).spec
+
+
+
