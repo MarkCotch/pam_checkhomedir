@@ -1,5 +1,5 @@
 %define		name		pam_checkhomedir
-%define		version		0.0.2
+%define		version		0.0.3
 %define		release		0%{?dist}
 
 Name:		%{name}
