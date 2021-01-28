@@ -1,6 +1,6 @@
 include	/etc/os-release
 NAME = pam_checkhomedir
-VERSION = 0.0.2
+VERSION = 0.0.3
 CC=gcc
 CFLAGS=-I. -lm
 DEPS =

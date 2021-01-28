@@ -20,8 +20,8 @@
 */
 
 #ifndef __PCHD_VERSION__
-  #define __PCHD_VERSION__    "0.0.2"
-  #define __PCHD_VERSION_D__   0.0.2
+  #define __PCHD_VERSION__    "0.0.3"
+  #define __PCHD_VERSION_D__   0.0.3
   #define __COPYRIGHT__       "2018"
   #define __COPYRIGHT_D__      2018
   #define __AUTHOR__ "Mark Coccimiglio"
@@ -71,6 +71,13 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
         return (PAM_USER_UNKNOWN);
       }
       if (__DEBUG__) syslog (LOG_NOTICE, "DEBUG:We have validated user: '%s' ...continue.", user);
+
+      /* First we do a dummy blind open to allow sufficient time incase the home directory */
+      /* mounts dynamicall (i.e. autofs) */
+      DIR *_trashDIR;
+      _trashDIR=opendir(_userInfo->pw_dir);
+      sleep(2);
+      closedir (_trashDIR);
 
       DIR *_homeDIR;
       if ( (_homeDIR=opendir(_userInfo->pw_dir) ) ) {
