@@ -20,17 +20,21 @@
 */
 
 #ifndef __PCHD_VERSION__
-  #define __PCHD_VERSION__    "0.0.3"
-  #define __PCHD_VERSION_D__   0.0.3
-  #define __COPYRIGHT__       "2018"
-  #define __COPYRIGHT_D__      2018
+  #define __PCHD_VERSION__    "0.0.4"
+  #define __PCHD_VERSION_D__   0.0.4
+  #define __COPYRIGHT__       "2021"
+  #define __COPYRIGHT_D__      2021
   #define __AUTHOR__ "Mark Coccimiglio"
   #define __AUTHOR_EMAIL__ "mcoccimiglio@rice.edu"
   #define __APP__ "pam_checkhomedir"
+
+  #define __PCHD_SLEEPDELAY__  2
 #endif
 
 #define PAM_SM_AUTH
 #define PAM_SM_SESSION
+
+
 
 #include <security/pam_modules.h>
 #include <security/_pam_macros.h>
@@ -74,19 +78,30 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
 
       /* First we do a dummy blind open to allow sufficient time incase the home directory */
       /* mounts dynamicall (i.e. autofs) */
-      DIR *_trashDIR;
-      _trashDIR=opendir(_userInfo->pw_dir);
-      sleep(2);
-      closedir (_trashDIR);
+      /* DIR *_trashDIR; */
+      /* _trashDIR=opendir(_userInfo->pw_dir); */
+      /* sleep(2); */
+      /* closedir (_trashDIR); */
 
       DIR *_homeDIR;
       if ( (_homeDIR=opendir(_userInfo->pw_dir) ) ) {
-        syslog (LOG_NOTICE, "pam_checkhomedir(%s): Validated home dir: '%s' ", service, _userInfo->pw_dir);
+        syslog (LOG_NOTICE, "pam_checkhomedir(%s): (a) Validated home dir: '%s' ", service, _userInfo->pw_dir);
         closedir (_homeDIR);
         return (PAM_SUCCESS);
       }
+      
+      syslog (LOG_NOTICE, "pam_checkhomedir(%s): (a) Error Validating home dir: '%s', Sleep __PCHD_SLEEPDELAY__ and Trying again...", service, _userInfo->pw_dir);
       closedir (_homeDIR);
-      syslog (LOG_NOTICE, "pam_checkhomedir(%s): Have NOT validated home dir: '%s' ", service, _userInfo->pw_dir);
+      sleep(__PCHD_SLEEPDELAY__);
+
+      if ( (_homeDIR=opendir(_userInfo->pw_dir) ) ) {
+        syslog (LOG_NOTICE, "pam_checkhomedir(%s): (b) Validated home dir: '%s' ", service, _userInfo->pw_dir);
+        closedir (_homeDIR);
+        return (PAM_SUCCESS);
+      }
+
+      closedir (_homeDIR);
+      syslog (LOG_NOTICE, "pam_checkhomedir(%s): (b) Have NOT validated home dir: '%s' ", service, _userInfo->pw_dir);
       return (PAM_PERM_DENIED);
 }
 
