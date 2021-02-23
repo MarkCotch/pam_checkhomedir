@@ -89,8 +89,8 @@ int checkhomedir (pam_handle_t *pamh, int flags, int argc, const char *argv[]) {
         closedir (_homeDIR);
         return (PAM_SUCCESS);
       }
-      
-      syslog (LOG_NOTICE, "pam_checkhomedir(%s): (a) Error Validating home dir: '%s', Sleep __PCHD_SLEEPDELAY__ and Trying again...", service, _userInfo->pw_dir);
+
+      syslog (LOG_NOTICE, "pam_checkhomedir(%s): (a) Error Validating home dir: '%s', Sleep %d second(s) and Trying again...", service, _userInfo->pw_dir, __PCHD_SLEEPDELAY__);
       closedir (_homeDIR);
       sleep(__PCHD_SLEEPDELAY__);
 
