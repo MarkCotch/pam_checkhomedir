@@ -1,5 +1,5 @@
 %define		name		pam_checkhomedir
-%define		version		0.0.3
+%define		version		0.0.4
 %define		release		0%{?dist}
 
 Name:		%{name}
@@ -26,19 +26,19 @@ Security NOTE: We currently do NOT test ownership or permissions at this time. D
 
 
 %install
-mkdir -p   %{buildroot}/usr/lib64/security/ 
-mv    -v   pam_checkhomedir.so %{buildroot}/usr/lib64/security/ 
+mkdir -p   %{buildroot}/usr/lib64/security/
+mv    -v   pam_checkhomedir.so %{buildroot}/usr/lib64/security/
 
-mkdir -p   %{buildroot}/usr/share/man/man8/ 
+mkdir -p   %{buildroot}/usr/share/man/man8/
 mv    -v   pam_checkhomedir.8 %{buildroot}/usr/share/man/man8/
 
-mkdir -p   %{buildroot}/usr/share/doc/%{name}-%{version} 
-mv    -v   README.md %{buildroot}/usr/share/doc/%{name}-%{version}/ 
+mkdir -p   %{buildroot}/usr/share/doc/%{name}-%{version}
+mv    -v   README.md %{buildroot}/usr/share/doc/%{name}-%{version}/
 mv    -v   LICENSE   %{buildroot}/usr/share/doc/%{name}-%{version}/
 
 %post
-grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$)/auth        required      pam_checkhomedir.so \n$1/' /etc/pam.d/system-auth
-grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$)/auth        required      pam_checkhomedir.so \n$1/' /etc/pam.d/password-auth
+grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_env.so.*$)/$1\nauth        required      pam_checkhomedir.so /' /etc/pam.d/system-auth
+grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_env.so.*$)/$1\nauth        required      pam_checkhomedir.so /' /etc/pam.d/password-auth
 
 %postun
 (( $1 )) || perl -i -pe 's/^.*pam_checkhomedir.*\n$//' /etc/pam.d/system-auth
@@ -53,5 +53,3 @@ grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*p
 
 
 %changelog
-
-

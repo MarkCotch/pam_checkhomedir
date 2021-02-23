@@ -60,8 +60,8 @@ install_bin_"fedora":
 	install -v -o root -g root -m 755 pam_checkhomedir.so $(PREFIX)/usr/lib64/security/
 
 install_conf_"fedora":
-	grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/auth        required      pam_checkhomedir.so \n$$1/' /etc/pam.d/system-auth
-	grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/auth        required      pam_checkhomedir.so \n$$1/' /etc/pam.d/password-auth
+	grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth        required      pam_checkhomedir.so /' /etc/pam.d/system-auth
+	grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_unix.so.*$$)/$$1\nauth        required      pam_checkhomedir.so /' /etc/pam.d/password-auth
 
 ###
 ### Uninstallers
@@ -94,7 +94,7 @@ uninstall_conf_"fedora":
 	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
 	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
 
-updateversion: clean 
+updateversion: clean
 	@(( NEWVER )) || echo 'update version requires define NEWVER. (e.g. make NEWVER=x.x.x updateversion)'
 	@(( NEWVER )) || exit
 	@echo $(NEWVER)
@@ -102,9 +102,6 @@ updateversion: clean
 #	perl -i -pe 's/^(VERSION =).*/\1 $(NEWVER)/' Makefile
 #	perl -i -pe 's/^(.*#define __PCHD_VERSION__).*$$/ \1  "$(NEWVER)" /'  $(NAME).c
 #	perl -i -pe 's/^(.*#define __PCHD_VERSION_D__).*$$/ \1  $(NEWVER) /'  $(NAME).c
-#	cp -v rpm/$(NAME)-$(VERSION).spec  rpm/$(NAME)-$(NEWVER).spec 
+#	cp -v rpm/$(NAME)-$(VERSION).spec  rpm/$(NAME)-$(NEWVER).spec
 #	perl -i -pe 's/^(%define.*version.*)%d.*$$/ \1  $(NEWVER) /' rpm/$(NAME)-$(NEWVER).spec
 #	perl -i -pe "s/.TH.*$/.TH man 8 \"$$(date "+%d %b %Y")\" \"$(NEWVER)\" \"$(NAME) man page\" " $(NAME).8
-
-
-
