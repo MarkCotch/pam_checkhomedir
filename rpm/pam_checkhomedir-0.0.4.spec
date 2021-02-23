@@ -1,6 +1,6 @@
 %define		name		pam_checkhomedir
 %define		version		0.0.4
-%define		release		0%{?dist}
+%define		release		0
 
 Name:		%{name}
 Version:	%{version}
@@ -49,6 +49,7 @@ grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*p
 /usr/lib64/security/pam_checkhomedir.so
 /usr/share/man/man8/pam_checkhomedir.8.gz
 /usr/share/doc/%{name}-%{version}
+
 
 
 
