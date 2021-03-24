@@ -18,4 +18,4 @@ Depending on how you configure PAM the user's home directory may mount regardles
 if the users credential are valid.  YMMV.
 
 Dependcies: pam
-Build Dependcies: pam-devel
+Build Dependcies: pam-devel (el) or libpam0g-dev (deb)
