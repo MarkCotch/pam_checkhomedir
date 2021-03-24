@@ -30,14 +30,6 @@ install_bin: install_bin_$(ID_LIKE)
 
 install_conf: install_conf_$(ID_LIKE)
 
-install_bin_debian: install_bin_"debian"
-
-install_conf_debian: install_conf_"debian"
-
-install_bin_fedora: install_bin_"fedora"
-
-install_conf_fedora: install_conf_"fedora"
-
 source: pam_checkhomedir
 	mkdir -p $(NAME)-$(VERSION)
 	cp    -v LICENSE             $(NAME)-$(VERSION)/
@@ -49,17 +41,25 @@ source: pam_checkhomedir
 install_docs:
 	install -v -o root -g root -m 755 pam_checkhomedir.8 $(PREFIX)/usr/share/man/man8/
 
-install_bin_"debian":
+install_bin_"debian": install_bin_debian
+
+install_bin_debian:
 	install -v -o root -g root -m 755 pam_checkhomedir.so $(PREFIX)/lib/x86_64-linux-gnu/security/
 
-install_conf_"debian":
+install_conf_"debian": install_conf_debian
+
+install_conf_debian:
 	install -v -o root -g root -m 755 checkhomedir $(PREFIX)/usr/share/pam-configs/checkhomedir
 	pam-auth-update --package
 
-install_bin_"fedora":
+install_bin_"fedora": install_bin_fedora
+
+install_bin_fedora:
 	install -v -o root -g root -m 755 pam_checkhomedir.so $(PREFIX)/usr/lib64/security/
 
-install_conf_"fedora":
+install_conf_"fedora": install_conf_fedora
+
+install_conf_fedora:
 	grep -q pam_checkhomedir.so /etc/pam.d/system-auth   || perl -i -pe 's/(^auth.*pam_env.so.*$$)/$$1\nauth        required      pam_checkhomedir.so /' /etc/pam.d/system-auth
 	grep -q pam_checkhomedir.so /etc/pam.d/password-auth || perl -i -pe 's/(^auth.*pam_env.so.*$$)/$$1\nauth        required      pam_checkhomedir.so /' /etc/pam.d/password-auth
 
@@ -73,24 +73,28 @@ uninstall_bin: uninstall_bin_$(ID_LIKE)
 
 uninstall_conf: uninstall_conf_$(ID_LIKE)
 
-uninstall_bin_debian: uninstall_bin_"debian"
-
-uninstall_conf_debian: uninstall_conf_"debian"
-
 uninstall_docs:
 	rm -vf /usr/share/man/man8/pam_checkhomedir.8
 
-uninstall_bin_"debian":
+uninstall_bin_"debian": uninstall_bin_debian
+
+uninstall_bin_debian:
 	rm -vf /usr/lib64/security/pam_checkhomedir.so
 
-uninstall_conf_"debian":
+uninstall_conf_"debian": uninstall_conf_debian
+
+uninstall_conf_debian:
 	rm -vf /usr/share/pam-configs/checkhomedir
 	pam-auth-update --package
 
-uninstall_bin_"fedora":
+uninstall_bin_"fedora": uninstall_bin_fedora
+
+uninstall_bin_fedora:
 	rm -vf /usr/lib64/security/pam_checkhomedir.so
 
-uninstall_conf_"fedora":
+uninstall_conf_"fedora": uninstall_conf_fedora
+
+uninstall_conf_fedora:
 	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/system-auth
 	perl -i -pe 's/^.*pam_checkhomedir.*\n$$//' /etc/pam.d/password-auth
 
