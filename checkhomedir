@@ -13,9 +13,3 @@ Session:
   required     pam_checkhomedir.so
 Session-Initial:
   required     pam_checkhomedir.so
-
-Account-Type: Additional
-Account:
-  required     pam_checkhomedir.so
-Account Initial:
-  required     pam_checkhomedir.so
