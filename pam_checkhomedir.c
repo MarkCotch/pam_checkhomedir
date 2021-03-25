@@ -44,6 +44,7 @@
 #include <pwd.h>
 #include <dirent.h>
 #include <syslog.h>
+#include <unistd.h>
 
 #define __DEBUG__ (0)
 
